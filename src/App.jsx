@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Jacobi from '../src/jacobi'
 import Gauss from '../src/gauss'
+import Newton from '../src/newton'
 
 const Home = () => {
   return <Jacobi/>;
@@ -10,6 +11,11 @@ const Home = () => {
 const About = () => {
   return <Gauss/>;
 };
+
+const Newto = () => {
+  return <Newton/>;
+};
+
 
 
 
@@ -24,11 +30,15 @@ const App = () => {
           <div className="menu-item">
             <a href="/Gauss seidel" className="menu-link">Metodo Gauss seidel</a>
           </div>
+          <div className="menu-item">
+            <a href="/Newton" className="menu-link">Metodo Newton-Raphson</a>
+          </div>
         </div>
 
         <Routes>
           <Route path="/Jacobi" element={<Home />} />
           <Route path="/Gauss seidel" element={<About />} />
+          <Route path="/Newton" element={<Newto />} />
         </Routes>
       </div>
 
