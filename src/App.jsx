@@ -14,13 +14,13 @@ const App = () => {
         <h1>Metodos unidad 2</h1>
         <div className="menu">
           <div className="menu-item">
-            <a href="/biseccion" className="menu-link">Metodo  Biseccion</a>
+            <a href="/biseccion" className="menu-link"> Biseccion</a>
           </div>
           <div className="menu-item">
-            <a href="/reglafalsa" className="menu-link">Metodo  Regla Falsa</a>
+            <a href="/reglafalsa" className="menu-link"> Regla Falsa</a>
           </div>
           <div className="menu-item">
-            <a href="/puntofijo" className="menu-link">Metodo  Regla punto fijo</a>
+            <a href="/puntofijo" className="menu-link"> Regla punto fijo</a>
           </div>
         </div>
         <br></br>
@@ -36,6 +36,9 @@ const App = () => {
             <a href="/Newton" className="menu-link">Metodo Newton-Raphson</a>
           </div>
         </div>
+
+        <h1>Metodos unidad 4 proximamente</h1>
+        
 
         <Routes>
           <Route path="/Jacobi" element={<Jacobi />} />
