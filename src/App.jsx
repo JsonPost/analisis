@@ -27,13 +27,13 @@ const App = () => {
         <h1>Metodos unidad 3</h1>
         <div className="menu">
           <div className="menu-item">
-            <a href="/Jacobi" className="menu-link">Metodo  Jacobi</a>
+            <a href="/Jacobi" className="menu-link">Jacobi</a>
           </div>
           <div className="menu-item">
-            <a href="/Gauss seidel" className="menu-link">Metodo Gauss seidel</a>
+            <a href="/Gauss seidel" className="menu-link"> Gauss seidel</a>
           </div>
           <div className="menu-item">
-            <a href="/Newton" className="menu-link">Metodo Newton-Raphson</a>
+            <a href="/Newton" className="menu-link">Newton-Raphson</a>
           </div>
         </div>
 
