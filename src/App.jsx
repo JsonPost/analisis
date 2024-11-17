@@ -3,26 +3,28 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Jacobi from '../src/jacobi'
 import Gauss from '../src/gauss'
 import Newton from '../src/newton'
-
-const Home = () => {
-  return <Jacobi/>;
-};
-
-const About = () => {
-  return <Gauss/>;
-};
-
-const Newto = () => {
-  return <Newton/>;
-};
-
-
-
+import Biseccion from '../src/biseccion'
+import ReglaFalsaSimple from '../src/reglafalsa'
+import MetodoPuntoFijo from '../src/puntofijo'
 
 const App = () => {
   return (
     <Router>
       <div className="container">
+        <h1>Metodos unidad 2</h1>
+        <div className="menu">
+          <div className="menu-item">
+            <a href="/biseccion" className="menu-link">Metodo  Biseccion</a>
+          </div>
+          <div className="menu-item">
+            <a href="/reglafalsa" className="menu-link">Metodo  Regla Falsa</a>
+          </div>
+          <div className="menu-item">
+            <a href="/puntofijo" className="menu-link">Metodo  Regla punto fijo</a>
+          </div>
+        </div>
+        <br></br>
+        <h1>Metodos unidad 3</h1>
         <div className="menu">
           <div className="menu-item">
             <a href="/Jacobi" className="menu-link">Metodo  Jacobi</a>
@@ -36,12 +38,14 @@ const App = () => {
         </div>
 
         <Routes>
-          <Route path="/Jacobi" element={<Home />} />
-          <Route path="/Gauss seidel" element={<About />} />
-          <Route path="/Newton" element={<Newto />} />
+          <Route path="/Jacobi" element={<Jacobi />} />
+          <Route path="/Gauss seidel" element={<Gauss />} />
+          <Route path="/Newton" element={<Newton />} />
+          <Route path="/biseccion" element={<Biseccion />} />
+          <Route path="/reglafalsa" element={<ReglaFalsaSimple />} />
+          <Route path="/puntofijo" element={<MetodoPuntoFijo />} />
         </Routes>
       </div>
-
       <style jsx>{`
         .container {
           text-align: center;
