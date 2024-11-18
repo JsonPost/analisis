@@ -6,6 +6,7 @@ import Newton from '../src/newton'
 import Biseccion from '../src/biseccion'
 import ReglaFalsaSimple from '../src/reglafalsa'
 import MetodoPuntoFijo from '../src/puntofijo'
+import DerivativeCalculator from '../src/derivada'
 
 const App = () => {
   return (
@@ -37,8 +38,10 @@ const App = () => {
           </div>
         </div>
 
-        <h1>Metodos unidad 4 proximamente</h1>
-        
+        <h1>Metodos unidad 4 proximamente(pruebas)</h1>
+        <div className="menu-item">
+            <a href="/derivada" className="menu-link">Derivada</a>
+          </div>
 
         <Routes>
           <Route path="/Jacobi" element={<Jacobi />} />
@@ -47,6 +50,7 @@ const App = () => {
           <Route path="/biseccion" element={<Biseccion />} />
           <Route path="/reglafalsa" element={<ReglaFalsaSimple />} />
           <Route path="/puntofijo" element={<MetodoPuntoFijo />} />
+          <Route path="/derivada" element={<DerivativeCalculator />} />
         </Routes>
       </div>
       <style jsx>{`
