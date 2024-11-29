@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { Chart } from "chart.js/auto";
+import { Line } from "react-chartjs-2";
+import "katex/dist/katex.min.css";
+import { InlineMath } from "react-katex";
 
 function Biseccion() {
   const [funcion, setFuncion] = useState("x * sin(x) - 1"); // Función a resolver
@@ -7,18 +11,19 @@ function Biseccion() {
   const [numIteraciones, setNumIteraciones] = useState(10); // Número de iteraciones
   const [resultados, setResultados] = useState([]); // Resultados de las iteraciones
   const [error, setError] = useState(""); // Mensaje de error
+  const [datosGrafica, setDatosGrafica] = useState(null); // Datos para la gráfica
 
   // Función para traducir notación matemática a JavaScript
   const traducirFuncion = (expresion) => {
     return expresion
-      .replace(/\^/g, "**") // Reemplazar potencias
-      .replace(/sin\(/g, "Math.sin(") // Reemplazar sin por Math.sin
-      .replace(/cos\(/g, "Math.cos(") // Reemplazar cos por Math.cos
-      .replace(/tan\(/g, "Math.tan(") // Reemplazar tan por Math.tan
-      .replace(/log\(/g, "Math.log(") // Reemplazar log por Math.log
-      .replace(/sqrt\(/g, "Math.sqrt(") // Reemplazar sqrt por Math.sqrt
-      .replace(/pi/g, "Math.PI") // Reemplazar pi por Math.PI
-      .replace(/e/g, "Math.E"); // Reemplazar e por Math.E
+      .replace(/\^/g, "**")
+      .replace(/sin\(/g, "Math.sin(")
+      .replace(/cos\(/g, "Math.cos(")
+      .replace(/tan\(/g, "Math.tan(")
+      .replace(/log\(/g, "Math.log(")
+      .replace(/sqrt\(/g, "Math.sqrt(")
+      .replace(/pi/g, "Math.PI")
+      .replace(/e/g, "Math.E");
   };
 
   // Función para evaluar la expresión matemática
@@ -32,14 +37,34 @@ function Biseccion() {
     }
   };
 
+  // Generar datos para la gráfica
+  const generarGrafica = () => {
+    const puntosX = [];
+    const puntosY = [];
+    for (let x = an - 1; x <= bn + 1; x += 0.1) {
+      puntosX.push(x);
+      puntosY.push(evaluarFuncion(funcion, x));
+    }
+    setDatosGrafica({
+      labels: puntosX.map((x) => x.toFixed(2)),
+      datasets: [
+        {
+          label: "f(x)",
+          data: puntosY,
+          borderColor: "blue",
+          fill: false,
+        },
+      ],
+    });
+  };
+
   // Función para ejecutar el método de bisección
   const ejecutarBiseccion = () => {
-    setError(""); // Limpiar errores previos
+    setError("");
     const iteraciones = [];
-    let a = parseFloat(an); // Cambiar a let
-    let b = parseFloat(bn); // Cambiar a let
+    let a = parseFloat(an);
+    let b = parseFloat(bn);
 
-    // Validar que a y b sean diferentes y que haya un cambio de signo en f(a) y f(b)
     let fa = evaluarFuncion(funcion, a);
     let fb = evaluarFuncion(funcion, b);
     if (isNaN(fa) || isNaN(fb)) {
@@ -53,32 +78,30 @@ function Biseccion() {
       return;
     }
 
-    // Realizar iteraciones del método de bisección
     for (let i = 0; i < numIteraciones; i++) {
-      const xn = (a + b) / 2; // Punto medio
+      const xn = (a + b) / 2;
       const fxn = evaluarFuncion(funcion, xn);
 
       iteraciones.push({
         iteracion: i + 1,
-        an: a.toFixed(4),
-        xn: xn.toFixed(4),
-        bn: b.toFixed(4),
-        fan: fa.toFixed(4),
-        fxn: fxn.toFixed(4),
-        fbn: fb.toFixed(4),
+        an: a,
+        xn: xn,
+        bn: b,
+        fan: fa,
+        fxn: fxn,
+        fbn: fb,
       });
 
-      // Decidir el nuevo intervalo
       if (fa * fxn < 0) {
-        b = xn; // El cambio de signo está entre a y xn
+        b = xn;
         fb = fxn;
       } else {
-        a = xn; // El cambio de signo está entre xn y b
+        a = xn;
         fa = fxn;
       }
     }
-
     setResultados(iteraciones);
+    generarGrafica();
   };
 
   return (
@@ -94,6 +117,7 @@ function Biseccion() {
             placeholder="Ej: x * sin(x) - 1"
             style={{ marginLeft: "10px", padding: "5px", width: "300px" }}
           />
+         <h1><InlineMath>{funcion}</InlineMath></h1>
         </label>
       </div>
       <div>
@@ -145,24 +169,36 @@ function Biseccion() {
             <thead>
               <tr>
                 <th>n</th>
-                <th>aₙ</th>
-                <th>xₙ</th>
-                <th>bₙ</th>
-                <th>f(aₙ)</th>
-                <th>f(xₙ)</th>
-                <th>f(bₙ)</th>
+                <th>
+                  <InlineMath>aₙ</InlineMath>
+                </th>
+                <th>
+                  <InlineMath>xₙ</InlineMath>
+                </th>
+                <th>
+                  <InlineMath>bₙ</InlineMath>
+                </th>
+                <th>
+                  <InlineMath>f(aₙ)</InlineMath>
+                </th>
+                <th>
+                  <InlineMath>f(xₙ)</InlineMath>
+                </th>
+                <th>
+                  <InlineMath>f(bₙ)</InlineMath>
+                </th>
               </tr>
             </thead>
             <tbody>
               {resultados.map((iter, index) => (
                 <tr key={index}>
                   <td>{iter.iteracion}</td>
-                  <td>{iter.an}</td>
-                  <td>{iter.xn}</td>
-                  <td>{iter.bn}</td>
-                  <td>{iter.fan}</td>
-                  <td>{iter.fxn}</td>
-                  <td>{iter.fbn}</td>
+                  <td>{iter.an.toFixed(4)}</td>
+                  <td>{iter.xn.toFixed(4)}</td>
+                  <td>{iter.bn.toFixed(4)}</td>
+                  <td>{iter.fan.toFixed(4)}</td>
+                  <td>{iter.fxn.toFixed(4)}</td>
+                  <td>{iter.fbn.toFixed(4)}</td>
                 </tr>
               ))}
             </tbody>
@@ -170,6 +206,10 @@ function Biseccion() {
         ) : (
           <p>No hay resultados aún.</p>
         )}
+      </div>
+      <div style={{ marginTop: "20px" }}>
+        <h3>Gráfica de f(x)</h3>
+        {datosGrafica && <Line data={datosGrafica} />}
       </div>
     </div>
   );

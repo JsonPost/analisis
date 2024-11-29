@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { InlineMath } from "react-katex";
 function MetodoPuntoFijo() {
   // Estados
   const [funciones, setFunciones] = useState([
@@ -35,7 +35,7 @@ function MetodoPuntoFijo() {
     try {
       const funcionTraducida = traducirFuncion(expresion);
       const radicando = (4 * x - 3) / (x + 2); // Calcular el radicando
-  
+
       // Verificar si el denominador es cero o si el radicando es negativo
       if (x + 2 === 0) {
         setError("Error: División por cero en el denominador.");
@@ -45,7 +45,7 @@ function MetodoPuntoFijo() {
         setError("Error: El radicando es negativo, no se puede calcular la raíz cuadrada.");
         return NaN; // Retornar NaN si el radicando es negativo
       }
-  
+
       // Si la función es válida, devolver el resultado
       return new Function("x", `return ${funcionTraducida}`).call(null, x);
     } catch (err) {
@@ -53,8 +53,8 @@ function MetodoPuntoFijo() {
       return NaN; // En caso de que haya un error en la evaluación
     }
   };
-  
-  
+
+
 
   // Calcular el valor de la función en un punto x
   const calcularValor = (funcion, x) => {
@@ -68,7 +68,7 @@ function MetodoPuntoFijo() {
       const g_a = calcularValor(func, a);
       const g_b = calcularValor(func, b);
       const cociente = Math.abs(g_b - g_a) / Math.abs(b - a);
-      
+
       if (cociente >= 1) {
         return false; // No cumple el criterio de Lipschitz
       }
@@ -188,8 +188,7 @@ function MetodoPuntoFijo() {
                     name="funcion"
                     value={func}
                     onChange={(e) => setFuncionSeleccionada(e.target.value)}
-                  />
-                  {func}
+                  />  <InlineMath>{func}</InlineMath>
                 </label>
               </li>
             ))}

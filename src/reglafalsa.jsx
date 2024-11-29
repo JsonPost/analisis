@@ -1,12 +1,20 @@
 import React, { useState } from "react";
+import { TextField, Button, Typography, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import { InlineMath } from "react-katex";
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+// Registrar componentes de Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function ReglaFalsaSimple() {
   // Estados
-  const [funcion, setFuncion] = useState("sin(x) +1"); // Función a resolver
+  const [funcion, setFuncion] = useState("sin(x) + 1"); // Función a resolver
   const [xn, setXn] = useState(1.5); // Valor inicial de x
   const [numIteraciones, setNumIteraciones] = useState(10); // Número de iteraciones
   const [resultados, setResultados] = useState([]); // Resultados de las iteraciones
   const [error, setError] = useState(""); // Mensaje de error
+  const [graficoData, setGraficoData] = useState({}); // Datos para el gráfico
 
   // Función para traducir notación matemática a JavaScript
   const traducirFuncion = (expresion) => {
@@ -25,8 +33,6 @@ function ReglaFalsaSimple() {
   const evaluarFuncion = (expresion, x) => {
     try {
       const funcionTraducida = traducirFuncion(expresion);
-      console.log(`return ${funcionTraducida}`)
-      console.log(Function("x", `return ${funcionTraducida}`).call(null, x))
       return new Function("x", `return ${funcionTraducida}`).call(null, x);
     } catch (err) {
       setError("Error al evaluar la función");
@@ -38,8 +44,10 @@ function ReglaFalsaSimple() {
   const ejecutarReglaFalsa = () => {
     setError(""); // Limpiar errores previos
     const iteraciones = [];
+    const puntosX = [];
+    const puntosY = [];
     let x = parseFloat(xn); // Valor inicial de x
-    console.log(funcion)
+
     // Validar que el valor inicial sea válido
     const fx = evaluarFuncion(funcion, x);
     if (isNaN(fx)) {
@@ -55,11 +63,6 @@ function ReglaFalsaSimple() {
         return;
       }
 
-      console.log({
-        iteracion: i + 1,
-        xn: x.toFixed(6), // Redondear xₙ
-        fxn: fxn.toFixed(6), // Redondear f(xₙ)
-      })
       // Guardar iteración
       iteraciones.push({
         iteracion: i + 1,
@@ -67,88 +70,118 @@ function ReglaFalsaSimple() {
         fxn: fxn.toFixed(6), // Redondear f(xₙ)
       });
 
+      // Agregar puntos para el gráfico
+      puntosX.push(x);
+      puntosY.push(fxn);
+
       // Actualizar xn (nuevo valor se asigna al anterior xn)
       x = fxn; // En esta versión, el valor de la función pasa a ser el nuevo xₙ
     }
 
     setResultados(iteraciones); // Guardar resultados
+
+    // Actualizar los datos del gráfico
+    setGraficoData({
+      labels: puntosX,
+      datasets: [
+        {
+          label: "f(x)",
+          data: puntosY,
+          borderColor: "rgba(75,192,192,1)",
+          fill: false,
+          tension: 0.1,
+        },
+      ],
+    });
   };
 
   // Renderizar interfaz
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Método de Regla Falsa - Simple</h2>
-      <div>
-        <label>
-          Ecuación (f(x)):
-          <input
-            type="text"
-            value={funcion}
-            onChange={(e) => setFuncion(e.target.value)}
-            placeholder="Ej: x^3 - x - 2"
-            style={{ marginLeft: "10px", padding: "5px", width: "300px" }}
-          />
-        </label>
+      <Typography variant="h4" gutterBottom>
+        Método de Regla Falsa - Simple
+      </Typography>
+      
+      <div style={{ marginBottom: "20px" }}>
+        <TextField
+          label="Ecuación (f(x))"
+          value={funcion}
+          onChange={(e) => setFuncion(e.target.value)}
+          placeholder="Ej: x^3 - x - 2"
+          fullWidth
+          variant="outlined"
+          style={{ marginBottom: "20px" }}
+        />
       </div>
-      <div style={{ marginTop: "10px" }}>
-        <label>
-          Valor inicial (x₀):
-          <input
-            type="number"
-            value={xn}
-            onChange={(e) => setXn(e.target.value)}
-            style={{ marginLeft: "10px", padding: "5px", width: "100px" }}
-          />
-        </label>
-        <label>
-          Número de Iteraciones:
-          <input
-            type="number"
-            value={numIteraciones}
-            onChange={(e) => setNumIteraciones(e.target.value)}
-            style={{ marginLeft: "10px", padding: "5px", width: "100px" }}
-          />
-        </label>
-        <button
-          onClick={ejecutarReglaFalsa}
-          style={{
-            marginLeft: "10px",
-            padding: "10px 20px",
-            cursor: "pointer",
-          }}
-        >
-          Ejecutar Regla Falsa
-        </button>
+
+      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+        <TextField
+          label="Valor inicial (x₀)"
+          type="number"
+          value={xn}
+          onChange={(e) => setXn(e.target.value)}
+          variant="outlined"
+          style={{ width: "150px" }}
+        />
+        <TextField
+          label="Número de Iteraciones"
+          type="number"
+          value={numIteraciones}
+          onChange={(e) => setNumIteraciones(e.target.value)}
+          variant="outlined"
+          style={{ width: "150px" }}
+        />
       </div>
+      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+        <InlineMath>{funcion}</InlineMath>
+      </div>
+      
+      <Button
+        onClick={ejecutarReglaFalsa}
+        variant="contained"
+        color="primary"
+        style={{ padding: "10px 20px", marginBottom: "20px" }}
+      >
+        Ejecutar Regla Falsa
+      </Button>
+
       {error && (
-        <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+        <Typography color="error" style={{ marginTop: "10px" }}>
+          {error}
+        </Typography>
       )}
+
+      {/* Mostrar el gráfico */}
+      {graficoData.labels && graficoData.labels.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <Typography variant="h6">Gráfico de f(x)</Typography>
+          <Line data={graficoData} />
+        </div>
+      )}
+
       <div style={{ marginTop: "20px" }}>
-        <h3>Resultados</h3>
+        <Typography variant="h6">Resultados</Typography>
         {resultados.length > 0 ? (
-          <table
-            border="1"
-            style={{ borderCollapse: "collapse", width: "100%" }}
-          >
-            <thead>
-              <tr>
-                <th>n</th>
-                <th>xₙ</th>
-                <th>f(xₙ)</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table style={{ marginTop: "10px", width: "100%" }}>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>n</strong></TableCell>
+                <TableCell><strong>xₙ</strong></TableCell>
+                <TableCell><strong>f(xₙ)</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {resultados.map((iter, index) => (
-                <tr key={index}>
-                  <td>{iter.iteracion}</td>
-                  <td>{iter.xn}</td>
-                  <td>{iter.fxn}</td>
-                </tr>
+                <TableRow key={index}>
+                  <TableCell>{iter.iteracion}</TableCell>
+                  <TableCell>{iter.xn}</TableCell>
+                  <TableCell>{iter.fxn}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         ) : (
-          <p>No hay resultados aún.</p>
+          <Typography>No hay resultados aún.</Typography>
         )}
       </div>
     </div>
