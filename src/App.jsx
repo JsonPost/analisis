@@ -9,6 +9,7 @@ import Biseccion from "../src/biseccion";
 import ReglaFalsaSimple from "../src/reglafalsa";
 import MetodoPuntoFijo from "../src/puntofijo";
 import DerivativeCalculator from "../src/derivada";
+import IntegralCalculator from "../src/integral";
 
 const App = () => {
   return (
@@ -33,6 +34,9 @@ const App = () => {
           anchor="left"
         >
           <List>
+            <ListItem button component="a" href="/">
+              <ListItemText primary="" />
+            </ListItem>
             <ListItem button component="a" href="/biseccion">
               <ListItemText primary="Bisección" />
             </ListItem>
@@ -54,6 +58,9 @@ const App = () => {
             <ListItem button component="a" href="/derivada">
               <ListItemText primary="Derivada" />
             </ListItem>
+            <ListItem button component="a" href="/integral">
+              <ListItemText primary="Integral(En pruebas)" />
+            </ListItem>
           </List>
         </Drawer>
         <Box
@@ -72,9 +79,11 @@ const App = () => {
               <Route path="/gauss" element={<Gauss />} />
               <Route path="/newton" element={<Newton />} />
               <Route path="/biseccion" element={<Biseccion />} />
+              <Route path="/" element={<Biseccion />} />
               <Route path="/reglafalsa" element={<ReglaFalsaSimple />} />
               <Route path="/puntofijo" element={<MetodoPuntoFijo />} />
               <Route path="/derivada" element={<DerivativeCalculator />} />
+              <Route path="/integral" element={<IntegralCalculator />} />
             </Routes>
           </Layout>
         </Box>

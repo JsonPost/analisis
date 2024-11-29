@@ -9,6 +9,11 @@ const SidebarMenu = () => {
       <nav>
         <List>
           <ListItem>
+            <ListItemButton component={Link} to="/">
+              <ListItemText primary="" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
             <ListItemButton component={Link} to="/biseccion">
               <ListItemText primary="Bisección" />
             </ListItemButton>
@@ -41,6 +46,11 @@ const SidebarMenu = () => {
           <ListItem>
             <ListItemButton component={Link} to="/derivada">
               <ListItemText primary="Derivada" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton component={Link} to="/integral">
+              <ListItemText primary="Integral" />
             </ListItemButton>
           </ListItem>
         </List>
